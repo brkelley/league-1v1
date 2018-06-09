@@ -2,7 +2,7 @@ import React from 'react'
 import { Provider } from 'react-redux'
 import { BrowserRouter as Router, Route } from 'react-router-dom'
 import App from './App'
-import LoginScreen from '../containers/Login';
+import LoginScreen from '../containers/LoginScreen';
 
 const Root = ({ store }) => (
     <Provider store={store}>
