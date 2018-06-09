@@ -2,45 +2,49 @@ var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+var log4js = require('log4js');
+var log = log4js.getLogger('League-1v1');
 var bodyParser = require('body-parser');
 
-var dbService = require('./services/db.js');
-var monk = require('monk');
-var db = monk('localhost:27017/league-1v1');
-
-var indexRouter = require('./routes/index');
-var newUserRouter = require('./routes/newUser');
+var apiRouter = require('./routes/index');
+var mongoService = require('./services/mongo.service');
 
 var app = express();
+
+// logger middle ware setup
+log.level = 'debug';
+var loggerMiddleware = (req, res, next) => { req.log = log; next()};
+app.use(loggerMiddleware);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
-app.use(logger('dev'));
+app.use(log4js.connectLogger(log4js.getLogger(), { level: 'debug' }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-dbService.db = db;
+app.use('/api', apiRouter);
 
-app.use(function(req,res,next){
-  req.dbService = dbService;
-  next();
-});
-
-app.use('/', indexRouter);
-app.use('/newUser', newUserRouter);
-
+app.get('/', (req, res, next) => {
+  mongoService.getUsers(req.log).then((docs) => {
+    const pageConfig = {
+      title: 'League 1v1',
+      subtitle: 'Users',
+      users: docs
+    }
+    res.render('index', pageConfig);
+  });
+})
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use((req, res, next) => {
   next(createError(404));
 });
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use((err, req, res, next) => {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};

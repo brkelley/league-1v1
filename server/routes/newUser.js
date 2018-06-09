@@ -3,7 +3,7 @@ var router = express.Router();
 var riot = require('../services/riot.js');
 
 
-router.post('/', (req, res) => {
+router.post('/newUser', (req, res) => {
     var dbService = req.dbService;
     dbService.checkName(dbService.db, req.body.name).then(result =>  {
         if(result){
