@@ -8,6 +8,9 @@ export class Login extends React.Component {
                 <span className="login-user-logo">
                     <i className="fas fa-user-circle"></i>
                 </span>
+                <div className="summoner-name-input-wrapper">
+                    <input className="summoner-name-input" />
+                </div>
             </div>
         );
     }

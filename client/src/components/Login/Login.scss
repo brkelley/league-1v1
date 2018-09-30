@@ -1,9 +1,18 @@
 .login-card {
-  margin: 25%;
-  background-color: lightgrey;
+  margin: 5% 25%;
+  background-color: #DCC7AA;
+  padding: 25px;
+  border-radius: 30px;
+  text-align: center;
 
   .login-user-logo {
-    color: black;
-    font-size: 4.5rem;
+    color: #6B7A8F;
+    font-size: 8rem;
+  }
+
+  .summoner-name-input-wrapper {
+    .summoner-name-input {
+      font-size: 1.5rem;
+    }
   }
 }

@@ -1,4 +1,5 @@
-var path = require('path');
+const path = require('path');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 module.exports = {
     mode: 'development',
@@ -27,11 +28,21 @@ module.exports = {
                 ]
             },
             {
+                test: /\.css$/,
+                use: ExtractTextPlugin.extract({
+                    fallback: 'style-loader',
+                    use: 'css-loader'
+                })
+            },
+            {
                 test:/\.(s*)css$/,
                 use:['style-loader','css-loader', 'sass-loader']
             }
         ]
     },
+    plugins: [
+        new ExtractTextPlugin("bundle.min.css"),
+    ],
     devServer: {
         contentBase: path.resolve(__dirname, "dist"),
         historyApiFallback: true
