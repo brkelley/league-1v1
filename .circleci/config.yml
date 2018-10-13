@@ -5,4 +5,9 @@ jobs:
       - image: circleci/node:4.8.2 # the primary container, where your job's commands are run
     steps:
       - checkout # check out the code in the project directory
-      - run: echo "hello world" > test.txt # run the `echo` command
+  deploy:
+    steps:
+      - run:
+          name: Deploy Over SSH
+          command: |
+            ssh pi@192.168.1.64 "mkdir /home/pi/Documents/dev/circlecitest/deployworked"
